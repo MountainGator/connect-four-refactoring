@@ -1,8 +1,3 @@
-const start = document.querySelector('#start');
-
-
-
-
 class Game {
     constructor(height, width, p1Color, p2Color) {
         this.height = height;
@@ -53,9 +48,9 @@ class Game {
 
         findSpotForCol(x) {
             for (let y = this.height - 1; y >= 0; y--) {
-            if (!this.board[y][x]) {
-                return y;
-            }
+                if (!this.board[y][x]) {
+                    return y;
+                }
             }
             return null;
         }
@@ -63,7 +58,7 @@ class Game {
         placeInTable(y, x) {
             const piece = document.createElement('div');
             piece.classList.add('piece');
-            piece.style.color = currPlayer === 1 ? this.p1Color : this.p2Color;
+            piece.style.color = (currPlayer === 1 ? this.p1Color : this.p2Color);
             piece.style.top = -50 * (y + 2);
             const spot = document.getElementById(`${y}-${x}`);
             spot.append(piece);
@@ -74,10 +69,15 @@ class Game {
         }
         
         handleClick(evt){
-            const x = +evt.target.id;
+        
+        const x = +evt.target.id;
     
         // get next spot in column (if none, ignore click)
-        const y = findSpotForCol(x);
+        const y = this.findSpotForCol(x);
+            if (y === null) {
+                return;
+            }
+        
         if (y === null) {
         return;
         }
@@ -105,9 +105,9 @@ class Game {
                 return cells.every(
                     ([y, x]) =>
                     y >= 0 &&
-                    y < HEIGHT &&
+                    y < this.height &&
                     x >= 0 &&
-                    x < WIDTH &&
+                    x < this.width &&
                     this.board[y][x] === this.currPlayer
                 );
                 }
@@ -129,14 +129,13 @@ class Game {
             }
         }
 }
-
+const start = document.querySelector('#start');
 start.addEventListener('click', (e) => {
     e.preventDefault();
     const p1Color = document.querySelector('input[name="p1color"]').value;
     const p2Color = document.querySelector('input[name="p2color"]').value;
     const wide = document.querySelector('input[name="wide"]').value;
     const high = document.querySelector('input[name="high"]').value;
-    new Game(high, wide, p1Color, p2Color)
-    
+    new Game(high, wide, p1Color, p2Color)  
 });
 
